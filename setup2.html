@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Setup — RS Panel</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <div class="auth-shell">
+    <div class="auth-card">
+      <div class="auth-mark">RS</div>
+      <h1>Firebase Connect Karein</h1>
+      <p class="sub">Apne Firebase project ka config paste karein — panel khud connect ho jayega, koi coding nahi.</p>
+
+      <div id="msg" class="msg"></div>
+
+      <form id="setupForm">
+        <div class="field">
+          <label for="configText">Firebase Config (poora block paste karein)</label>
+          <textarea id="configText" placeholder='const firebaseConfig = {
+  apiKey: "AIzaSy...",
+  authDomain: "myapp.firebaseapp.com",
+  projectId: "myapp",
+  storageBucket: "myapp.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abcdef"
+};' required></textarea>
+          <div class="hint">
+            Firebase console → Project settings → General → "Your apps" → <code>Config</code> option se copy karein, aur yahan paste karein.
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-accent" id="connectBtn">Connect Firebase</button>
+      </form>
+
+      <div class="link-row">
+        Pehle se connected? <a href="login.html">Login page par jayein</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="assets/firebase-config.js"></script>
+  <script>
+    const form = document.getElementById("setupForm");
+    const msg = document.getElementById("msg");
+    const btn = document.getElementById("connectBtn");
+
+    function showMsg(text, type) {
+      msg.textContent = text;
+      msg.className = "msg show " + type;
+    }
+
+    // Agar pehle se config saved hai to seedha login/dashboard bhej do
+    if (isFirebaseConfigured()) {
+      showMsg("Firebase pehle se connected hai. Redirect ho raha hai...", "success");
+      setTimeout(() => { window.location.href = "login.html"; }, 900);
+    }
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      btn.disabled = true;
+      btn.textContent = "Connecting...";
+
+      try {
+        const raw = document.getElementById("configText").value;
+        const config = parseFirebaseConfigText(raw);
+
+        // Test connection: initialize app temporarily and check it doesn't throw
+        if (firebase.apps.length) {
+          firebase.apps.forEach(app => app.delete());
+        }
+        firebase.initializeApp(config);
+
+        // Save only after successful init
+        saveFirebaseConfig(config);
+
+        showMsg("✓ Firebase successfully connect ho gaya! Login page par bhej rahe hain...", "success");
+        setTimeout(() => { window.location.href = "login.html"; }, 1200);
+      } catch (err) {
+        showMsg("Error: " + err.message, "error");
+        btn.disabled = false;
+        btn.textContent = "Connect Firebase";
+      }
+    });
+  </script>
+</body>
+</html>
