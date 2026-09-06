@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — RS Panel</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <div class="auth-shell">
+    <div class="auth-card">
+      <div class="auth-mark">RS</div>
+      <h1>Panel Login</h1>
+      <p class="sub">Apne admin account se login karein.</p>
+
+      <div id="msg" class="msg"></div>
+
+      <form id="loginForm">
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="admin@example.com" required>
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-accent" id="loginBtn">Login</button>
+      </form>
+
+      <div class="divider">ya</div>
+      <button class="btn btn-ghost" id="signupBtn">Naya Account Banayein</button>
+
+      <div class="link-row">
+        Firebase connect nahi hai? <a href="setup.html">Setup page par jayein</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="assets/firebase-config.js"></script>
+  <script>
+    const msg = document.getElementById("msg");
+    function showMsg(text, type) {
+      msg.textContent = text;
+      msg.className = "msg show " + type;
+    }
+
+    if (!initFirebaseFromStorage()) {
+      window.location.href = "setup.html";
+    } else {
+      const auth = firebase.auth();
+
+      // Already logged in? seedha dashboard
+      auth.onAuthStateChanged((user) => {
+        if (user) window.location.href = "dashboard.html";
+      });
+
+      document.getElementById("loginForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const btn = document.getElementById("loginBtn");
+        btn.disabled = true;
+        btn.textContent = "Logging in...";
+
+        auth.signInWithEmailAndPassword(email, password)
+          .then(() => { window.location.href = "dashboard.html"; })
+          .catch((err) => {
+            showMsg(err.message, "error");
+            btn.disabled = false;
+            btn.textContent = "Login";
+          });
+      });
+
+      document.getElementById("signupBtn").addEventListener("click", function () {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        if (!email || !password) {
+          showMsg("Account banane ke liye email aur password bharein.", "error");
+          return;
+        }
+        auth.createUserWithEmailAndPassword(email, password)
+          .then(() => { window.location.href = "dashboard.html"; })
+          .catch((err) => { showMsg(err.message, "error"); });
+      });
+    }
+  </script>
+</body>
+</html>
