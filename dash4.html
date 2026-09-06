@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — RS Panel</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="mark">RS</div>
+        <span>RS Panel</span>
+      </div>
+
+      <nav>
+        <a class="nav-item active" data-tab="overview"><span class="dot"></span>Overview</a>
+        <a class="nav-item" data-tab="orders"><span class="dot"></span>Orders</a>
+        <a class="nav-item" data-tab="services"><span class="dot"></span>Services</a>
+        <a class="nav-item" data-tab="users"><span class="dot"></span>Users</a>
+        <a class="nav-item" data-tab="settings"><span class="dot"></span>Settings</a>
+      </nav>
+
+      <div class="sidebar-foot">
+        <div class="user-chip">
+          <div class="avatar" id="avatarLetter">?</div>
+          <div class="u-email" id="userEmail">Loading...</div>
+        </div>
+        <button class="signout" id="signoutBtn">Sign out</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <h2 id="pageTitle">Overview</h2>
+        <span class="badge">Firebase Connected</span>
+      </div>
+
+      <div class="content">
+        <!-- Overview tab -->
+        <div class="tab-panel" id="tab-overview">
+          <div class="grid">
+            <div class="stat-card">
+              <div class="label">Total Orders</div>
+              <div class="value" id="statOrders">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="label">Active Services</div>
+              <div class="value" id="statServices">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="label">Total Users</div>
+              <div class="value" id="statUsers">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="label">Pending Orders</div>
+              <div class="value" id="statPending">0</div>
+            </div>
+          </div>
+          <div class="panel">
+            <h3>Recent Orders</h3>
+            <p>Firestore ke "orders" collection se live data.</p>
+            <table>
+              <thead><tr><th>Order ID</th><th>Service</th><th>Status</th><th>Amount</th></tr></thead>
+              <tbody id="recentOrdersBody">
+                <tr class="empty-row"><td colspan="4">Loading...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Orders tab -->
+        <div class="tab-panel" id="tab-orders" style="display:none">
+          <div class="panel">
+            <h3>All Orders</h3>
+            <p>Firestore collection: <code>orders</code></p>
+            <table>
+              <thead><tr><th>Order ID</th><th>Service</th><th>Status</th><th>Amount</th></tr></thead>
+              <tbody id="allOrdersBody">
+                <tr class="empty-row"><td colspan="4">Loading...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Services tab -->
+        <div class="tab-panel" id="tab-services" style="display:none">
+          <div class="panel">
+            <h3>Services</h3>
+            <p>Firestore collection: <code>services</code></p>
+            <table>
+              <thead><tr><th>Name</th><th>Rate</th><th>Category</th></tr></thead>
+              <tbody id="servicesBody">
+                <tr class="empty-row"><td colspan="3">Loading...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Users tab -->
+        <div class="tab-panel" id="tab-users" style="display:none">
+          <div class="panel">
+            <h3>Users</h3>
+            <p>Firestore collection: <code>users</code></p>
+            <table>
+              <thead><tr><th>Email</th><th>Balance</th><th>Joined</th></tr></thead>
+              <tbody id="usersBody">
+                <tr class="empty-row"><td colspan="3">Loading...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Settings tab -->
+        <div class="tab-panel" id="tab-settings" style="display:none">
+          <div class="panel">
+            <h3>Firebase Connection</h3>
+            <p>Filhaal is project se connected hai.</p>
+            <table>
+              <tbody id="configTableBody"></tbody>
+            </table>
+            <div style="margin-top:18px;">
+              <button class="btn" style="width:auto;background:var(--danger);" id="disconnectBtn">Disconnect Firebase</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="assets/firebase-config.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
