@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RS Panel</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <div class="auth-shell">
+    <div class="auth-card" style="text-align:center;">
+      <div class="auth-mark" style="margin:0 auto 20px;">RS</div>
+      <h1>RS Panel</h1>
+      <p class="sub">Redirect ho raha hai...</p>
+    </div>
+  </div>
+  <script src="assets/firebase-config.js"></script>
+  <script>
+    if (isFirebaseConfigured()) {
+      window.location.href = "login.html";
+    } else {
+      window.location.href = "setup.html";
+    }
+  </script>
+</body>
+</html>
